@@ -1,0 +1,133 @@
+# Telif Hakkı ve Yasal Bilgiler
+
+## Ezan Vakti Lite Mobil Uygulaması
+
+**Versiyon:** 1.0
+**Yayın Tarihi:** 15 Mart 2026
+**Telif Hakkı:** © 2026 Ezan Vakti Lite. Tüm hakları saklıdır.
+
+## Fikri Mülkiyet Hakları
+
+### Uygulama
+Ezan Vakti Lite mobil uygulaması ("Uygulama"), tasarımı, kaynak kodu, grafikler, ikonlar, kullanıcı arayüzü ve tüm içeriği telif hakkı yasaları ve uluslararası anlaşmalarla korunmaktadır.
+
+### Marka
+"Ezan Vakti Lite" adı ve logosu tescilli markadır. İzinsiz kullanılamaz.
+
+## Lisans
+
+### Kullanıcı Lisansı
+Bu Uygulama'yı indirerek aşağıdaki koşulları kabul edersiniz:
+
+**İzin verilen kullanımlar:**
+- Kişisel kullanım için cihazınıza kurma
+- Normal şartlarda kullanma
+- Yasal amaçlarla kullanma
+
+**İzin verilmeyen kullanımlar:**
+- Uygulamayı tersine mühendislik (reverse engineering) yapma
+- Kaynak kodunu kopyalama
+- Ticari amaçlarla kullanma
+- Değiştirme veya türev eserler oluşturma
+- Yeniden dağıtma
+
+## Veri Kaynakları
+
+### Namaz Vakitleri
+Diyanet İşleri Başkanlığı'nın açık veri platformundan alınmıştır.
+- Kaynak: https://namazvakitleri.diyanet.gov.tr
+- Lisans: Açık Veri
+
+**Önemli Uyarı:**
+Bu uygulama Diyanet İşleri Başkanlığı'nın RESMİ uygulaması DEĞİLDİR.
+Bağımsız bir geliştirici tarafından oluşturulmuştur.
+
+### İl/İlçe Verileri
+Türkiye Cumhuriyeti İçişleri Bakanlığı'nın açık verilerinden derlenmiştir.
+
+## Üçüncü Taraf Kütüphaneler
+
+Bu uygulama aşağıdaki açık kaynak kütüphaneleri kullanır:
+
+### Firebase
+- **Kullanım:** Analytics ve performans izleme
+- **Lisans:** Apache License 2.0
+- **Sahip:** Google LLC
+- **Web:** https://firebase.google.com
+
+### Google Mobile Ads SDK
+- **Kullanım:** Reklam gösterimi
+- **Lisans:** Google Mobile Ads SDK License
+- **Sahip:** Google LLC
+- **Web:** https://developers.google.com/admob
+
+### SwiftUI
+- **Kullanım:** Kullanıcı arayüzü
+- **Lisans:** Apple SDK License
+- **Sahip:** Apple Inc.
+
+## Sorumluluk Reddi
+
+### Hizmet Sunumu
+Bu uygulama "OLDUĞU GİBİ" sunulur. Hiçbir garanti verilmez.
+
+**Sorumluluk kabul etmediğimiz durumlar:**
+- Veri doğruluğu (kaynağa bağlıdır)
+- Kesinti veya hatalar
+- Üçüncü taraf hizmetlerin performansı
+- Veri kaybı
+- Cihaz uyumluluğu sorunları
+
+### Kullanım Sorumluluğu
+Namaz vakitlerinin doğruluğu için daima resmi Diyanet kaynaklarını teyit etmeniz önerilir.
+
+## Kullanım Koşulları
+
+### Kabul Edilebilir Kullanım
+Uygulamayı kullanarak şunları KABUL ETMEMİŞ olursunuz:
+
+**Yasak faaliyetler:**
+- Yasadışı amaçlarla kullanma
+- Başkalarının haklarını ihlal etme
+- Zararlı içerik yayma
+- Sistemi manipüle etme
+- Bot veya otomatik araçlar kullanma
+
+### Hizmetin Değiştirilmesi
+Herhangi bir zamanda:
+- Uygulamayı güncelleme
+- Özellikleri değiştirme veya kaldırma
+- Hizmeti sonlandırma
+
+hakkını saklı tutarız.
+
+
+
+## Uyuşmazlık Çözümü
+
+### Yargı Yeri
+Bu uygulama ve kullanım koşulları Türkiye Cumhuriyeti yasalarına tabidir.
+
+Herhangi bir uyuşmazlıkta İstanbul mahkemeleri ve icra daireleri yetkilidir.
+
+
+
+## Güncellemeler
+
+Bu telif hakkı ve yasal bilgiler sayfası zaman zaman güncellenebilir.
+
+**Son güncelleme:** 15 Mart 2026
+**Versiyon:** 1.0
+
+## Onay
+
+Ezan Vakti Lite uygulamasını kullanarak yukarıdaki tüm koşulları okuduğunuzu ve kabul ettiğinizi beyan edersiniz.
+
+---
+
+© 2026 Ezan Vakti Lite. Tüm hakları saklıdır.
+
+Bu belge Türkiye Cumhuriyeti telif hakkı yasaları ve uluslararası telif hakkı anlaşmalarıyla korunmaktadır.
+
+**Apple, iPhone, iPad, iOS, App Store:** Apple Inc.'in tescilli markalarıdır.
+**Google, Firebase, AdMob, Android:** Google LLC'nin tescilli markalarıdır.
