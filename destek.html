@@ -1,357 +1,123 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destek - Ezan Vakti</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #0c1e3d 0%, #152d50 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        h1 {
-            color: #0c1e3d;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-        h2 {
-            color: #2f5738;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.8em;
-            border-bottom: 2px solid #2f5738;
-            padding-bottom: 10px;
-        }
-        h3 {
-            color: #0c1e3d;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-        ul, ol {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        .icon {
-            font-size: 3em;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .contact-box {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .email {
-            color: #2f5738;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        .email:hover {
-            text-decoration: underline;
-        }
-        .faq {
-            background: #f9f9f9;
-            padding: 15px;
-            border-left: 4px solid #2f5738;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        .faq-question {
-            font-weight: bold;
-            color: #0c1e3d;
-            margin-bottom: 8px;
-        }
-        .faq-answer {
-            color: #555;
-        }
-        .lang-switch {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        .lang-switch a {
-            margin-left: 10px;
-            color: #2f5738;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .lang-switch a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="lang-switch">
-            <a href="#tr">🇹🇷 Türkçe</a>
-            <a href="#en">🇬🇧 English</a>
-        </div>
+# Ezan Vakti - Destek
 
-        <div id="tr">
-            <div class="icon">🕌</div>
-            <h1>Ezan Vakti - Destek</h1>
-            <p style="color: #666; font-style: italic;">Türkiye'nin Her İli için Namaz Vakitleri</p>
+Son güncelleme: 15 Mart 2026
 
-            <h2>📱 Uygulama Hakkında</h2>
-            <p>
-                Ezan Vakti, Türkiye'nin tüm il ve ilçeleri için Diyanet İşleri Başkanlığı verilerine dayalı 
-                günlük namaz vakitlerini sunan ücretsiz bir uygulamadır. Modern tasarımı ve kullanıcı dostu 
-                arayüzü ile namaz vakitlerini takip etmenizi kolaylaştırır.
-            </p>
+## Hoş Geldiniz
 
-            <h2>❓ Sıkça Sorulan Sorular</h2>
+Ezan Vakti uygulamasını seçtiğiniz için teşekkür ederiz. Bu sayfa, uygulamayı kullanırken karşılaşabileceğiniz soruların cevaplarını içerir.
 
-            <div class="faq">
-                <div class="faq-question">🔔 Bildirimler nasıl çalışır?</div>
-                <div class="faq-answer">
-                    Her namaz vakti için ayrı ayrı bildirim açıp kapatabilirsiniz. Ana ekranda her vaktin 
-                    yanındaki zil ikonuna dokunarak bildirim ayarını değiştirebilirsiniz. Bildirimler her gün 
-                    otomatik olarak güncellenir.
-                </div>
-            </div>
+## Sıkça Sorulan Sorular
 
-            <div class="faq">
-                <div class="faq-question">📍 Konum izni neden gerekiyor?</div>
-                <div class="faq-answer">
-                    Konum izni sadece bulunduğunuz il ve ilçeyi otomatik olarak bulmak için kullanılır. 
-                    Konum bilgileriniz cihazınızda kalır ve sunucularımıza gönderilmez. İsterseniz manuel 
-                    olarak da il/ilçe seçebilirsiniz.
-                </div>
-            </div>
+### Uygulama Nasıl Kullanılır?
 
-            <div class="faq">
-                <div class="faq-question">🧭 Kıble pusulası nasıl kullanılır?</div>
-                <div class="faq-answer">
-                    Ana ekranın sağ üst köşesindeki pusula ikonuna dokunun. Telefonunuzu yatay tutun ve 
-                    yeşil ok Kıble yönünü gösterecektir. Pusulayı kalibre etmek için telefonunuzu 8 şeklinde 
-                    hareket ettirin.
-                </div>
-            </div>
+**Namaz Vakitlerini Görüntüleme:**
+1. Uygulamayı açın
+2. Üst kısımdaki "İl / İlçe Seç" butonuna tıklayın
+3. İlinizi ve ilçenizi seçin
+4. Günlük namaz vakitleri otomatik olarak yüklenecektir
 
-            <div class="faq">
-                <div class="faq-question">⏰ Vakitler doğru mu?</div>
-                <div class="faq-answer">
-                    Evet! Tüm vakitler Diyanet İşleri Başkanlığı'nın resmi verilerine dayanmaktadır ve 
-                    günlük olarak güncellenir. Her il ve ilçe için ayrı ayrı hesaplanmıştır.
-                </div>
-            </div>
+**Konum ile Otomatik Seçim:**
+1. Ana ekranda "Konum" butonuna tıklayın
+2. Konum iznini verin
+3. Uygulama size en yakın il/ilçeyi otomatik bulacaktır
 
-            <div class="faq">
-                <div class="faq-question">🌙 Karanlık mod var mı?</div>
-                <div class="faq-answer">
-                    Uygulama, cihazınızın karanlık mod ayarını otomatik olarak takip eder. 
-                    iPhone'unuzun Ayarlar → Ekran ve Parlaklık bölümünden karanlık modu açabilirsiniz.
-                </div>
-            </div>
+### Bildirimler Nasıl Ayarlanır?
 
-            <div class="faq">
-                <div class="faq-question">🌐 İngilizce dil desteği var mı?</div>
-                <div class="faq-answer">
-                    Evet, uygulama Türkçe ve İngilizce dillerini destekler. Dil, cihazınızın sistem 
-                    dil ayarına göre otomatik olarak seçilir.
-                </div>
-            </div>
+1. Her namaz vaktinin yanındaki zil ikonuna tıklayın
+2. Aktif olanlar yeşil, pasif olanlar gri renkte görünür
+3. İstediğiniz vakitler için bildirimleri açıp kapatabilirsiniz
+4. İlk kullanımda bildirim izni vermeniz gerekecektir
 
-            <div class="faq">
-                <div class="faq-question">💰 Uygulama ücretli mi?</div>
-                <div class="faq-answer">
-                    Hayır, Ezan Vakti tamamen ücretsizdir. Herhangi bir abonelik, uygulama içi satın alma 
-                    veya gizli ücret yoktur. Uygulama reklamlarla desteklenmektedir.
-                </div>
-            </div>
+### Kıble Yönü Nasıl Bulunur?
 
-            <div class="faq">
-                <div class="faq-question">🔄 Vakitler güncellenmiyor?</div>
-                <div class="faq-answer">
-                    Aşağı kaydırarak (pull to refresh) vakitleri manuel olarak güncelleyebilirsiniz. 
-                    Uygulama her açıldığında ve her gün otomatik olarak vakitleri günceller. İnternet 
-                    bağlantınızı kontrol edin.
-                </div>
-            </div>
+1. Ana ekranın sağ üst köşesindeki pusula ikonuna tıklayın
+2. Telefonunuzu düz tutun
+3. Yeşil ok Kıble yönünü gösterecektir
+4. Konum izni vermeniz gerekir
 
-            <h2>🛠 Teknik Destek</h2>
-            
-            <h3>Uygulama çöküyor veya donuyor</h3>
-            <ol>
-                <li>Uygulamayı tamamen kapatıp yeniden açın</li>
-                <li>iPhone'unuzu yeniden başlatın</li>
-                <li>Uygulamayı silin ve App Store'dan yeniden indirin</li>
-                <li>iOS güncellemelerinizi kontrol edin</li>
-            </ol>
+### Dil Nasıl Değiştirilir?
 
-            <h3>Bildirimler gelmiyor</h3>
-            <ol>
-                <li>Ayarlar → Bildirimler → Ezan Vakti'ye gidin</li>
-                <li>"Bildirimlere İzin Ver" seçeneğinin açık olduğundan emin olun</li>
-                <li>Sesler, Banner ve Bildirim Merkezi'nin açık olduğunu kontrol edin</li>
-                <li>Odak Modu (Focus) kapalı olmalı</li>
-                <li>Uygulamada en az bir vakit için bildirim aktif olmalı</li>
-            </ol>
+1. Ana ekranın sağ üst köşesindeki ay-yıldız ikonuna tıklayın
+2. "Dil / Language" bölümünden Türkçe veya English seçin
+3. Ayarlar otomatik kaydedilir
 
-            <h3>Konum bulunamıyor</h3>
-            <ol>
-                <li>Ayarlar → Gizlilik ve Güvenlik → Konum Servisleri'ne gidin</li>
-                <li>Konum Servisleri'nin açık olduğundan emin olun</li>
-                <li>Ezan Vakti'yi bulun ve "Uygulama Kullanımda İken" seçin</li>
-                <li>Dışarıda veya pencere kenarında daha iyi sinyal alabilirsiniz</li>
-            </ol>
+### Verilerim Güvende mi?
 
-            <h2>📧 İletişim</h2>
-            <div class="contact-box">
-                <p>Sorularınız, önerileriniz veya sorun bildirimleriniz için bizimle iletişime geçin:</p>
-                <p style="text-align: center; margin-top: 15px;">
-                    <a href="mailto:support@ezanvakti.app" class="email">📮 support@ezanvakti.app</a>
-                </p>
-                <p style="font-size: 0.9em; color: #666; margin-top: 15px;">
-                    ⏱ Ortalama yanıt süresi: 24-48 saat (hafta içi)
-                </p>
-            </div>
+Evet! Ezan Vakti:
+- Konum bilginizi sunuculara göndermez
+- Tüm veriler cihazınızda saklanır
+- Minimum veri toplama prensibiyle çalışır
+- Kişisel bilgilerinizi üçüncü taraflarla paylaşmaz
 
-            <h2>🆕 Özellik İstekleri</h2>
-            <p>
-                Uygulamaya eklenmesini istediğiniz özellikleri bizimle paylaşın! Kullanıcı geri bildirimlerine 
-                önem veriyor ve sürekli geliştirme yapıyoruz. Planladığımız özellikler:
-            </p>
-            <ul>
-                <li>Widget desteği (ana ekran widget'ı)</li>
-                <li>Apple Watch uygulaması</li>
-                <li>Tesbih sayacı</li>
-                <li>Kaza namazı takibi</li>
-                <li>Dini günler takvimi</li>
-            </ul>
+## Teknik Sorunlar
 
-            <h2>📱 Sistem Gereksinimleri</h2>
-            <ul>
-                <li><strong>Platform:</strong> iPhone, iPad</li>
-                <li><strong>iOS Sürümü:</strong> iOS 15.0 veya üzeri</li>
-                <li><strong>İnternet:</strong> İlk kurulum ve güncellemeler için gerekli</li>
-                <li><strong>Konum:</strong> Opsiyonel (manuel seçim mevcut)</li>
-            </ul>
+### Vakitler Yüklenmiyor
 
-            <h2>📊 Gizlilik</h2>
-            <p>
-                Gizliliğiniz bizim için önemlidir. Uygulamamız minimum veri toplar ve konum bilgileriniz 
-                cihazınızda kalır. Detaylı bilgi için 
-                <a href="privacy.html" style="color: #2f5738;">Gizlilik Politikası</a>'mızı inceleyin.
-            </p>
+**Çözüm:**
+1. İnternet bağlantınızı kontrol edin
+2. Uygulamayı kapatıp yeniden açın
+3. Ana ekranda aşağı çekerek yenileyin (pull to refresh)
+4. Farklı bir il/ilçe seçip tekrar deneyin
 
-            <p style="text-align: center; margin-top: 40px; color: #999; font-size: 0.9em;">
-                © 2026 Ezan Vakti. Tüm hakları saklıdır.
-            </p>
-        </div>
+### Bildirimler Gelmiyor
 
-        <!-- ENGLISH VERSION -->
-        <div id="en" style="display: none;">
-            <div class="icon">🕌</div>
-            <h1>Prayer Times - Support</h1>
-            <p style="color: #666; font-style: italic;">Daily Prayer Times for All Cities in Turkey</p>
+**Çözüm:**
+1. Ayarlar → Bildirimler → Ezan Vakti kontrol edin
+2. Bildirimlerin açık olduğundan emin olun
+3. Uygulama içinde ilgili vakit için zil ikonunun yeşil olduğunu kontrol edin
+4. Telefonu yeniden başlatın
 
-            <h2>📱 About the App</h2>
-            <p>
-                Prayer Times is a free application that provides daily prayer times based on official Diyanet 
-                (Turkey's Directorate of Religious Affairs) data for all cities and districts in Turkey. 
-                With its modern design and user-friendly interface, it makes it easy to track prayer times.
-            </p>
+### Konum Bulunamıyor
 
-            <h2>❓ Frequently Asked Questions</h2>
+**Çözüm:**
+1. Ayarlar → Gizlilik → Konum Servisleri kontrol edin
+2. Konum Servisleri'nin açık olduğundan emin olun
+3. Ezan Vakti için "Uygulama Kullanılırken" izni verin
+4. GPS sinyalinin iyi olduğundan emin olun
 
-            <div class="faq">
-                <div class="faq-question">🔔 How do notifications work?</div>
-                <div class="faq-answer">
-                    You can enable or disable notifications for each prayer time separately. Tap the bell icon 
-                    next to each prayer time on the main screen to change notification settings. Notifications 
-                    are automatically updated daily.
-                </div>
-            </div>
+### Kıble Pusulası Yanlış Gösteriyor
 
-            <div class="faq">
-                <div class="faq-question">📍 Why does the app need location permission?</div>
-                <div class="faq-answer">
-                    Location permission is only used to automatically find your city and district. Your location 
-                    data stays on your device and is never sent to our servers. You can also manually select 
-                    your city/district if you prefer.
-                </div>
-            </div>
+**Çözüm:**
+1. Telefonu düz bir yüzeye koyun
+8 şeklinde hareket ettirerek kalibre edin
+2. Telefonun metal yüzeylerden uzak olduğundan emin olun
+3. Konum izninin verildiğinden emin olun
+4. GPS sinyalinin açık alanda daha iyi çalıştığını unutmayın
 
-            <div class="faq">
-                <div class="faq-question">🧭 How to use the Qibla compass?</div>
-                <div class="faq-answer">
-                    Tap the compass icon in the top right corner of the main screen. Hold your phone horizontally 
-                    and the green arrow will point to the Qibla direction. Move your phone in a figure-8 pattern 
-                    to calibrate the compass.
-                </div>
-            </div>
+## Özellik Talepleri
 
-            <div class="faq">
-                <div class="faq-question">⏰ Are the prayer times accurate?</div>
-                <div class="faq-answer">
-                    Yes! All prayer times are based on official data from Turkey's Diyanet (Directorate of 
-                    Religious Affairs) and are updated daily. They are calculated separately for each city 
-                    and district.
-                </div>
-            </div>
+Uygulamaya eklenmesini istediğiniz özellikler için bizimle iletişime geçin.
 
-            <div class="faq">
-                <div class="faq-question">💰 Is the app paid?</div>
-                <div class="faq-answer">
-                    No, Prayer Times is completely free. There are no subscriptions, in-app purchases, or 
-                    hidden fees. The app is supported by advertisements.
-                </div>
-            </div>
+### Planladığımız Özellikler:
+- Ezan sesi ekleme
+- Widget desteği
+- Apple Watch uygulaması
+- Hicri takvim
+- Tesbih sayacı
+- Dua koleksiyonu
 
-            <h2>📧 Contact</h2>
-            <div class="contact-box">
-                <p>For questions, suggestions, or bug reports, please contact us:</p>
-                <p style="text-align: center; margin-top: 15px;">
-                    <a href="mailto:support@ezanvakti.app" class="email">📮 support@ezanvakti.app</a>
-                </p>
-                <p style="font-size: 0.9em; color: #666; margin-top: 15px;">
-                    ⏱ Average response time: 24-48 hours (weekdays)
-                </p>
-            </div>
+**Geri Bildirim:**
+Uygulamamızı beğendiyseniz App Store'da yorum bırakmayı unutmayın!
 
-            <p style="text-align: center; margin-top: 40px; color: #999; font-size: 0.9em;">
-                © 2026 Prayer Times. All rights reserved.
-            </p>
-        </div>
-    </div>
 
-    <script>
-        // Simple language switcher
-        document.querySelectorAll('.lang-switch a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const lang = e.target.getAttribute('href').substring(1);
-                document.getElementById('tr').style.display = lang === 'tr' ? 'block' : 'none';
-                document.getElementById('en').style.display = lang === 'en' ? 'block' : 'none';
-            });
-        });
-    </script>
-</body>
-</html>
+## Güncelleme Notları
+
+### Versiyon 1.0
+- İlk sürüm
+- Türkiye'nin tüm il ve ilçeleri için namaz vakitleri
+- Konum tabanlı otomatik il/ilçe bulma
+- Kıble pusulası
+- Namaz vakti bildirimleri
+- Türkçe ve İngilizce dil desteği
+- Koyu tema
+
+## Yasal
+
+Gizlilik Politikası için tıklayın: [Privacy Policy](privacy.html)
+
+Copyright © 2026 Ezan Vakti. Tüm hakları saklıdır.
+
+---
+
+Bu uygulama Diyanet İşleri Başkanlığı'nın açık verilerini kullanmaktadır.
+Resmi bir Diyanet uygulaması değildir.
