@@ -1,10 +1,17 @@
-# Ezan Vakti - Destek
+# Ezan Vakti Lite - Destek / Support
 
-Son güncelleme: 15 Mart 2026
+Son güncelleme / Last updated: 24 Mart 2026
 
-## Hoş Geldiniz
+---
 
-Ezan Vakti uygulamasını seçtiğiniz için teşekkür ederiz. Bu sayfa, uygulamayı kullanırken karşılaşabileceğiniz soruların cevaplarını içerir.
+## 🇹🇷 Türkçe
+
+### Hoş Geldiniz
+
+Ezan Vakti Lite uygulamasını seçtiğiniz için teşekkür ederiz. Bu sayfa,
+uygulamayı kullanırken karşılaşabileceğiniz soruların cevaplarını içerir.
+
+---
 
 ## Sıkça Sorulan Sorular
 
@@ -12,97 +19,125 @@ Ezan Vakti uygulamasını seçtiğiniz için teşekkür ederiz. Bu sayfa, uygula
 
 **Namaz Vakitlerini Görüntüleme:**
 1. Uygulamayı açın
-2. Üst kısımdaki "İl / İlçe Seç" butonuna tıklayın
+2. Üst kısımdaki konum satırına tıklayın
 3. İlinizi ve ilçenizi seçin
-4. Günlük namaz vakitleri otomatik olarak yüklenecektir
+4. Günlük namaz vakitleri otomatik yüklenecektir
 
 **Konum ile Otomatik Seçim:**
-1. Ana ekranda "Konum" butonuna tıklayın
+1. Konum satırındaki konum butonuna tıklayın
 2. Konum iznini verin
 3. Uygulama size en yakın il/ilçeyi otomatik bulacaktır
 
 ### Bildirimler Nasıl Ayarlanır?
 
 1. Her namaz vaktinin yanındaki zil ikonuna tıklayın
-2. Aktif olanlar yeşil, pasif olanlar gri renkte görünür
+2. Aktif olanlar yeşil, pasif olanlar gri görünür
 3. İstediğiniz vakitler için bildirimleri açıp kapatabilirsiniz
 4. İlk kullanımda bildirim izni vermeniz gerekecektir
 
 ### Kıble Yönü Nasıl Bulunur?
 
-1. Ana ekranın sağ üst köşesindeki pusula ikonuna tıklayın
+1. Alt menüden "Kıble" butonuna tıklayın
 2. Telefonunuzu düz tutun
-3. Yeşil ok Kıble yönünü gösterecektir
-4. Konum izni vermeniz gerekir
+3. Ok Kıble yönünü gösterecektir
+4. Daha iyi sonuç için 8 şeklinde hareket ettirerek kalibre edin
+
+### Günün Ayeti Nasıl Kullanılır?
+
+1. Alt menüden "Günün Ayeti" butonuna tıklayın
+2. Arapça metin ve Türkçe meal görüntülenir
+3. Oynat butonuna tıklayarak sesli tilaveti dinleyin
+4. Her gün farklı bir ayet gösterilir
+
+### Cami Bulucu Nasıl Çalışır?
+
+1. Alt menüden "Cami Bulucu" butonuna tıklayın
+2. Konum iznini verin
+3. Çevrenizde bulunan camiler harita üzerinde gösterilir
+4. Bir camiye tıklayarak yol tarifi alabilirsiniz
+
+### Önemli Günler Nerede?
+
+Alt menüden "Önemli Günler" butonuna tıklayın.  
+Kandil geceleri, Ramazan, Kurban ve Ramazan Bayramı ile diğer
+İslami özel günlerin tarihleri listelenir.
+
+### Koruma Duaları Nerede?
+
+Alt menüden "Nazar Duası" butonuna tıklayın.  
+Koruyucu dualar metin olarak görüntülenir, "Hepsini Oku" butonuyla
+sesli okunuşu dinleyebilirsiniz.
 
 ### Dil Nasıl Değiştirilir?
 
-1. Ana ekranın sağ üst köşesindeki ay-yıldız ikonuna tıklayın
-2. "Dil / Language" bölümünden Türkçe veya English seçin
+1. Alt menüden "Ayarlar" butonuna tıklayın
+2. "Dil / Language" bölümünden Türkçe, English veya العربية seçin
 3. Ayarlar otomatik kaydedilir
+
+### Tema Nasıl Değiştirilir?
+
+Ayarlar sayfasından Koyu (Dark) veya Açık (Light) tema seçebilirsiniz.
 
 ### Verilerim Güvende mi?
 
-Evet! Ezan Vakti:
+Evet! Ezan Vakti Lite:
 - Konum bilginizi sunuculara göndermez
 - Tüm veriler cihazınızda saklanır
 - Minimum veri toplama prensibiyle çalışır
 - Kişisel bilgilerinizi üçüncü taraflarla paylaşmaz
 
+---
+
 ## Teknik Sorunlar
 
 ### Vakitler Yüklenmiyor
 
-**Çözüm:**
 1. İnternet bağlantınızı kontrol edin
 2. Uygulamayı kapatıp yeniden açın
 3. Ana ekranda aşağı çekerek yenileyin (pull to refresh)
-4. Farklı bir il/ilçe seçip tekrar deneyin
+4. İnternet yoksa önbellekteki son veriler gösterilir
 
 ### Bildirimler Gelmiyor
 
-**Çözüm:**
-1. Ayarlar → Bildirimler → Ezan Vakti kontrol edin
+1. iPhone Ayarlar → Bildirimler → Ezan Vakti Lite'ı kontrol edin
 2. Bildirimlerin açık olduğundan emin olun
 3. Uygulama içinde ilgili vakit için zil ikonunun yeşil olduğunu kontrol edin
 4. Telefonu yeniden başlatın
 
 ### Konum Bulunamıyor
 
-**Çözüm:**
-1. Ayarlar → Gizlilik → Konum Servisleri kontrol edin
-2. Konum Servisleri'nin açık olduğundan emin olun
-3. Ezan Vakti için "Uygulama Kullanılırken" izni verin
-4. GPS sinyalinin iyi olduğundan emin olun
+1. iPhone Ayarlar → Gizlilik → Konum Servisleri'ni kontrol edin
+2. Ezan Vakti Lite için "Uygulamayı Kullanırken" iznini verin
+3. GPS sinyalinin iyi olduğundan emin olun
+4. Konum yoksa il/ilçeyi manuel seçebilirsiniz
 
 ### Kıble Pusulası Yanlış Gösteriyor
 
-**Çözüm:**
-1. Telefonu düz bir yüzeye koyun
-8 şeklinde hareket ettirerek kalibre edin
-2. Telefonun metal yüzeylerden uzak olduğundan emin olun
-3. Konum izninin verildiğinden emin olun
-4. GPS sinyalinin açık alanda daha iyi çalıştığını unutmayın
+1. Telefonu düz bir yüzeyde 8 şeklinde hareket ettirerek kalibre edin
+2. Metal yüzeyler ve mıknatıstan uzak durun
+3. Açık alanda daha doğru sonuç alırsınız
 
-## Özellik Talepleri
+### Günün Ayeti Sesi Çalmıyor
 
-Uygulamaya eklenmesini istediğiniz özellikler için bizimle iletişime geçin.
+1. Telefonun sesini kontrol edin (sessiz modda olmadığından emin olun)
+2. İnternet bağlantınızı kontrol edin (ses dosyaları çevrimiçi yüklenir)
+3. Uygulamayı kapatıp yeniden açın
 
-### Planladığımız Özellikler:
-- Ezan sesi ekleme
-- Widget desteği
-- Apple Watch uygulaması
-- Hicri takvim
-- Tesbih sayacı
-- Dua koleksiyonu
-
-**Geri Bildirim:**
-Uygulamamızı beğendiyseniz App Store'da yorum bırakmayı unutmayın!
-
+---
 
 ## Güncelleme Notları
 
-### Versiyon 1.0
+### Versiyon 1.0.1
+- Günün Ayeti: sesli tilavet (Mishary Rashid Alafasy)
+- Cami Bulucu: yakın camileri harita üzerinde göster
+- Önemli İslami Günler takvimi
+- Nazar Duaları (sesli)
+- Arapça dil desteği eklendi
+- Açık tema (Light Mode) eklendi
+- Çevrimdışı önbellek desteği
+- Performans ve tasarım iyileştirmeleri
+
+### Versiyon 1.0.0
 - İlk sürüm
 - Türkiye'nin tüm il ve ilçeleri için namaz vakitleri
 - Konum tabanlı otomatik il/ilçe bulma
@@ -111,13 +146,170 @@ Uygulamamızı beğendiyseniz App Store'da yorum bırakmayı unutmayın!
 - Türkçe ve İngilizce dil desteği
 - Koyu tema
 
-## Yasal
+---
 
-Gizlilik Politikası için tıklayın: [Privacy Policy](privacy.html)
+**Geri Bildirim:**  
+Uygulamamızı beğendiyseniz App Store'da yorum bırakmayı unutmayın!
 
-Copyright © 2026 Ezan Vakti. Tüm hakları saklıdır.
+---
+---
+
+## 🇬🇧 English
+
+### Welcome
+
+Thank you for choosing Ezan Vakti Lite. This page contains answers to
+common questions you may encounter while using the app.
 
 ---
 
-Bu uygulama Diyanet İşleri Başkanlığı'nın açık verilerini kullanmaktadır.
-Resmi bir Diyanet uygulaması değildir.
+## Frequently Asked Questions
+
+### How Do I Use the App?
+
+**Viewing Prayer Times:**
+1. Open the app
+2. Tap the location row at the top
+3. Select your city and district
+4. Daily prayer times will load automatically
+
+**Automatic Location Detection:**
+1. Tap the location button in the location row
+2. Grant location permission
+3. The app will automatically find your nearest city and district
+
+### How Do I Set Up Notifications?
+
+1. Tap the bell icon next to any prayer time
+2. Active notifications appear green, inactive ones grey
+3. Toggle notifications on/off for each prayer individually
+4. You will be asked for notification permission on first use
+
+### How Do I Find the Qibla Direction?
+
+1. Tap "Qibla" in the bottom navigation bar
+2. Hold your phone flat
+3. The arrow will point toward the Qibla
+4. Calibrate by moving your phone in a figure-8 motion
+
+### How Do I Use the Verse of the Day?
+
+1. Tap "Verse" in the bottom navigation bar
+2. The Arabic text and Turkish meaning are displayed
+3. Tap the play button to listen to the audio recitation
+4. A different verse is shown every day
+
+### How Does the Mosque Finder Work?
+
+1. Tap "Mosques" in the bottom navigation bar
+2. Grant location permission
+3. Nearby mosques are shown on the map
+4. Tap a mosque for directions
+
+### Where Are the Important Islamic Days?
+
+Tap "Events" in the bottom navigation bar.  
+Kandil nights, Ramadan, Eid al-Adha, Eid al-Fitr and other special
+Islamic dates are listed.
+
+### Where Are the Protection Prayers?
+
+Tap "Protection" in the bottom navigation bar.  
+Protective prayers are displayed as text. Tap "Read All" to listen
+to the audio recitation.
+
+### How Do I Change the Language?
+
+1. Tap "Settings" in the bottom navigation bar
+2. Under "Language", select Turkish, English, or Arabic (العربية)
+3. Settings are saved automatically
+
+### How Do I Change the Theme?
+
+In Settings, choose between Dark or Light theme.
+
+### Is My Data Safe?
+
+Yes! Ezan Vakti Lite:
+- Does not send your location to any server
+- Stores all data on your device
+- Operates with a minimal data collection principle
+- Does not share personal information with third parties
+
+---
+
+## Troubleshooting
+
+### Prayer Times Not Loading
+
+1. Check your internet connection
+2. Close and reopen the app
+3. Pull down to refresh on the main screen
+4. Without internet, the last cached data will be shown automatically
+
+### Notifications Not Working
+
+1. Go to iPhone Settings → Notifications → Ezan Vakti Lite
+2. Make sure notifications are allowed
+3. Check that the bell icon for the relevant prayer is green in the app
+4. Restart your phone
+
+### Location Not Found
+
+1. Go to iPhone Settings → Privacy → Location Services
+2. Set Ezan Vakti Lite to "While Using the App"
+3. Make sure you have a good GPS signal
+4. You can always select your city/district manually
+
+### Qibla Compass Inaccurate
+
+1. Calibrate by moving your phone in a figure-8 motion on a flat surface
+2. Stay away from metal surfaces and magnets
+3. Results are more accurate outdoors
+
+### Verse of the Day Audio Not Playing
+
+1. Check your phone volume (make sure it's not on silent)
+2. Check your internet connection (audio is streamed online)
+3. Close and reopen the app
+
+---
+
+## Release Notes
+
+### Version 1.0.1
+- Verse of the Day with audio recitation (Mishary Rashid Alafasy)
+- Mosque Finder: show nearby mosques on a map
+- Important Islamic Days calendar
+- Protection Prayers with audio
+- Arabic language support added
+- Light theme (Light Mode) added
+- Offline cache support
+- Performance and UI improvements
+
+### Version 1.0.0
+- Initial release
+- Prayer times for all cities and districts in Turkey
+- GPS-based automatic city/district detection
+- Qibla compass
+- Prayer time notifications
+- Turkish and English language support
+- Dark theme
+
+---
+
+**Feedback:**  
+If you enjoy the app, please consider leaving a review on the App Store!
+
+---
+
+## Legal
+
+[Privacy Policy](privacy.html)
+
+Copyright © 2026 Ezan Vakti Lite. All rights reserved.
+
+---
+
+*This app uses open data from Turkey's Directorate of Religious Affairs (Diyanet İşleri Başkanlığı).
+It is not an official Diyanet application.*
