@@ -1,10 +1,12 @@
-# Ezan Vakti - Türkiye'nin Namaz Vakti Uygulaması
+# Ezan Vakti Lite - Türkiye'nin Namaz Vakti Uygulaması
 
 ## Namaz Vakitlerinizi Asla Kaçırmayın
 
-Ezan Vakti, Türkiye'nin her yerinden günlük namaz vakitlerini öğrenmenin en kolay yolu. Diyanet İşleri Başkanlığı'nın resmi verilerine dayalı, güvenilir ve kullanımı son derece kolay.
+Ezan Vakti Lite, Türkiye'nin her yerinden günlük namaz vakitlerini 
+öğrenmenin en kolay yolu. Diyanet İşleri Başkanlığı'nın resmi verilerine 
+dayalı, güvenilir ve kullanımı son derece kolay.
 
-## Neden Ezan Vakti?
+## Neden Ezan Vakti Lite?
 
 ### ✅ Tamamen Ücretsiz
 Herhangi bir ücret veya abonelik yok. Tüm özellikler ücretsiz!
@@ -36,30 +38,44 @@ GPS ile bulunduğunuz yeri otomatik tespit eder.
 - Her vakit için ayrı ayar
 - Tek tıkla açma/kapama
 - Otomatik günlük planlama
-- Sessiz bildirim opsiyonu
 
 ### 🧭 Kıble Pusulası
 - Gerçek zamanlı yön gösterimi
 - GPS tabanlı hassas hesaplama
 - Tam ekran görünüm
-- Kolay kalibrasyon
+
+### 📖 Günün Ayeti
+- Her gün farklı bir Kuran ayeti
+- Arapça metin ve Türkçe meal
+- Mishary Rashid Alafasy sesiyle sesli tilavet
+
+### 🕌 Cami Bulucu
+- Bulunduğunuz konuma en yakın camileri harita üzerinde görün
+- Tek dokunuşla yol tarifi
+
+### 🗓 Önemli İslami Günler
+- Kandil geceleri, Ramazan, Kurban ve Ramazan Bayramı
+- Tüm özel gün ve gecelerin takvimi
+
+### 🤲 Koruma Duaları
+- Nazar duası ve koruyucu dualar
+- Sesli okunuş ile birlikte takip edin
 
 ### 📍 Konum Özellikleri
 - Otomatik il/ilçe bulma
 - Manuel seçim opsiyonu
-- En yakın konum önerisi
-- Offline çalışma
+- Offline çalışma (önbellek desteği)
 
 ### 🎨 Modern Arayüz
 - Sade ve şık tasarım
-- İslamî geometrik desenler
-- Koyu tema (Dark Mode)
+- İslami geometrik desenler
+- Koyu ve açık tema (Dark / Light Mode)
 - Hızlı ve akıcı animasyonlar
 
 ### 🌐 Çok Dilli
 - Türkçe tam destek
 - English (İngilizce) tam destek
-- Daha fazla dil yakında!
+- العربية (Arapça) tam destek
 
 ## Kullanıcılarımız Ne Diyor?
 
@@ -81,29 +97,8 @@ GPS ile bulunduğunuz yeri otomatik tespit eder.
 
 Detaylı bilgi için: [Gizlilik Politikası](https://github.com/berkardic/EzanVaktiLite/blob/main/privacy-policy)
 
-
 ## Hemen İndirin!
 
 App Store'dan şimdi indirin ve namaz vakitlerinizi asla kaçırmayın.
 
 [App Store'dan İndir](https://apps.apple.com/app/ezanvaktilite)
-
-
-
-## Güncellemeler
-
-Düzenli güncellemeler ile yeni özellikler ekliyoruz:
-
-**Yakında:**
-- Ezan sesi
-- Widget desteği
-- Apple Watch uygulaması
-- Hicri takvim
-- Tesbih sayacı
-
----
-
-© 2026 Ezan Vakti. Tüm hakları saklıdır.
-
-Bu uygulama Diyanet İşleri Başkanlığı'nın açık verilerini kullanmaktadır.
-Resmi bir Diyanet uygulaması değildir.
