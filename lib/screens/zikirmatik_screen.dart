@@ -322,7 +322,7 @@ class _DhikrListCard extends StatelessWidget {
 class _DhikrDetailScreen extends StatefulWidget {
   final _Dhikr dhikr;
   final String language;
-  const _DhikrDetailScreen({super.key, required this.dhikr, required this.language});
+  const _DhikrDetailScreen({required this.dhikr, required this.language});
 
   @override
   State<_DhikrDetailScreen> createState() => _DhikrDetailScreenState();
