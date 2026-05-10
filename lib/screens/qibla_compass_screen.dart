@@ -21,28 +21,31 @@ class QiblaCompassScreen extends StatefulWidget {
 }
 
 class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
-  /// Cumulative heading (not clamped to 0-360) so AnimatedRotation never
-  /// animates the long way around when crossing the 0°/360° boundary.
+  /// Cumulative heading so AnimatedRotation never wraps the long way around.
   double _headingCumulative = 0;
-  double _headingRaw = 0; // for display only (cardinal direction)
+  double _headingRaw = 0;
   double _qiblaDirection = 0;
   bool _isAuthorized = false;
   bool _hasLocation = false;
+  bool _noSensor = false;       // device has no compass hardware
+  bool _needsCalibration = false; // Android: low magnetometer accuracy
   StreamSubscription<CompassEvent>? _compassSubscription;
 
-  // Eşik: 0.5 dereceden küçük değişimlerde setState çağırma (pil tasarrufu).
   static const double _headingThreshold = 0.5;
 
-  void _updateHeading(double newRaw) {
-    // Current angle in [0, 360)
-    double currentAngle = _headingCumulative % 360;
-    if (currentAngle < 0) currentAngle += 360;
-    // Shortest angular diff
-    double diff = newRaw - currentAngle;
+  void _updateHeading(double newRaw, double? accuracy) {
+    final currentAngle = _headingCumulative % 360;
+    double diff = newRaw - (currentAngle < 0 ? currentAngle + 360 : currentAngle);
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
     _headingCumulative += diff;
     _headingRaw = newRaw;
+
+    // accuracy is in degrees on Android (lower = better).
+    // Values > 45° or == -1 signal unreliable magnetometer.
+    if (accuracy != null && accuracy != 0) {
+      _needsCalibration = accuracy > 45 || accuracy < 0;
+    }
   }
 
   @override
@@ -72,16 +75,23 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
       _hasLocation = true;
     } catch (_) {}
 
-    _compassSubscription = FlutterCompass.events?.listen((event) {
-      if (event.heading == null || !mounted) return;
-      final newRaw = event.heading!;
-      // Yalnızca eşik değeri aşıldığında rebuild yap
-      double currentAngle = _headingCumulative % 360;
-      if (currentAngle < 0) currentAngle += 360;
-      double diff = (newRaw - currentAngle).abs();
+    // Null stream means the device has no compass sensor (common on emulators).
+    if (FlutterCompass.events == null) {
+      setState(() => _noSensor = true);
+      return;
+    }
+
+    _compassSubscription = FlutterCompass.events!.listen((event) {
+      if (!mounted) return;
+      final newRaw = event.heading;
+      if (newRaw == null) return;
+
+      final currentAngle = _headingCumulative % 360;
+      double diff = (newRaw - (currentAngle < 0 ? currentAngle + 360 : currentAngle)).abs();
       if (diff > 180) diff = 360 - diff;
+
       if (diff >= _headingThreshold) {
-        setState(() => _updateHeading(newRaw));
+        setState(() => _updateHeading(newRaw, event.accuracy));
       }
     });
 
@@ -91,25 +101,20 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
   void _calculateQiblaDirection(double lat, double lon) {
     const kaabaLat = 21.4225;
     const kaabaLon = 39.8262;
-
     final lat1 = lat * pi / 180;
     final lon1 = lon * pi / 180;
     final lat2 = kaabaLat * pi / 180;
     final lon2 = kaabaLon * pi / 180;
     final dLon = lon2 - lon1;
-
     final y = sin(dLon) * cos(lat2);
     final x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
     var bearing = atan2(y, x) * 180 / pi;
-    bearing = (bearing + 360) % 360;
-
-    _qiblaDirection = bearing;
+    _qiblaDirection = (bearing + 360) % 360;
   }
 
   String get _cardinalDirection {
     const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-    final index = ((_headingRaw + 22.5) / 45).floor() % 8;
-    return directions[index];
+    return directions[((_headingRaw + 22.5) / 45).floor() % 8];
   }
 
   @override
@@ -125,7 +130,6 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
               bottom: false,
               child: Column(
                 children: [
-                  // Back arrow row
                   Padding(
                     padding: const EdgeInsets.only(left: 4, top: 4),
                     child: Row(
@@ -138,14 +142,10 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                       ],
                     ),
                   ),
-                  // Header
                   Column(
                     children: [
-                      Icon(
-                        AppIcons.compass,
-                        size: 50,
-                        color: AppTheme.accentColor(context),
-                      ),
+                      Icon(AppIcons.compass, size: 50,
+                          color: AppTheme.accentColor(context)),
                       const SizedBox(height: 8),
                       Text(
                         AppStrings.qiblaCompass(vm.language),
@@ -160,25 +160,20 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
                             vm.locationLabel,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppTheme.textSecondary(context),
-                            ),
+                            style: TextStyle(fontSize: 14,
+                                color: AppTheme.textSecondary(context)),
                           ),
                         ),
                     ],
                   ),
                   const Spacer(),
 
-                  // Compass (2 layers)
                   SizedBox(
                     width: 300,
                     height: 300,
                     child: Stack(
                       children: [
-                        // Layer 1: Rotating compass rose
                         CompassRose(heading: _headingCumulative),
-                        // Layer 2: Qibla arrow (independent rotation)
                         QiblaArrow(
                           heading: _headingCumulative,
                           qiblaDirection: _qiblaDirection,
@@ -189,7 +184,6 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                   ),
                   const SizedBox(height: 30),
 
-                  // Direction info
                   Container(
                     padding: const EdgeInsets.all(16),
                     margin: const EdgeInsets.symmetric(horizontal: 40),
@@ -200,58 +194,59 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              AppStrings.direction(vm.language),
-                              style: TextStyle(fontSize: 12, color: AppTheme.textSecondary(context)),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _cardinalDirection,
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.textPrimary(context),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          color: AppTheme.divider(context),
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              AppStrings.qibla(vm.language),
-                              style: TextStyle(fontSize: 12, color: AppTheme.textSecondary(context)),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '${_qiblaDirection.toStringAsFixed(0)}\u00B0',
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.greenAccent,
-                              ),
-                            ),
-                          ],
-                        ),
+                        Column(children: [
+                          Text(AppStrings.direction(vm.language),
+                              style: TextStyle(fontSize: 12,
+                                  color: AppTheme.textSecondary(context))),
+                          const SizedBox(height: 4),
+                          Text(_cardinalDirection,
+                              style: TextStyle(fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.textPrimary(context))),
+                        ]),
+                        Container(width: 1, height: 40,
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            color: AppTheme.divider(context)),
+                        Column(children: [
+                          Text(AppStrings.qibla(vm.language),
+                              style: TextStyle(fontSize: 12,
+                                  color: AppTheme.textSecondary(context))),
+                          const SizedBox(height: 4),
+                          Text('${_qiblaDirection.toStringAsFixed(0)}°',
+                              style: const TextStyle(fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.greenAccent)),
+                        ]),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 12),
 
-                  // Warnings
+                  // Warnings (stacked, only visible ones shown)
+                  if (_noSensor)
+                    WarningCard(
+                      icon: Icons.sensors_off_rounded,
+                      message: vm.language == 'tr'
+                          ? 'Bu cihazda pusula sensörü bulunamadı.'
+                          : vm.language == 'ar'
+                              ? 'لا يوجد مستشعر بوصلة في هذا الجهاز.'
+                              : 'No compass sensor found on this device.',
+                    ),
+                  if (!_noSensor && _needsCalibration)
+                    WarningCard(
+                      icon: Icons.explore_off_rounded,
+                      message: vm.language == 'tr'
+                          ? 'Pusula kalibrasyonu gerekiyor. Telefonu 8 şeklinde hareket ettirin.'
+                          : vm.language == 'ar'
+                              ? 'البوصلة تحتاج إلى معايرة. حرّك الهاتف على شكل رقم 8.'
+                              : 'Compass needs calibration. Move your phone in a figure-8 pattern.',
+                    ),
                   if (!_isAuthorized)
                     WarningCard(
                       icon: AppIcons.locationDenied,
                       message: AppStrings.locationPermWarning(vm.language),
                     ),
-                  if (_isAuthorized && !_hasLocation)
+                  if (_isAuthorized && !_hasLocation && !_noSensor)
                     WarningCard(
                       icon: AppIcons.gpsNotFixed,
                       message: AppStrings.gettingLocation(vm.language),
