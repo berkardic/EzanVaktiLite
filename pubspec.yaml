@@ -1,0 +1,54 @@
+name: ezan_vakti
+description: "Ezan Vakti - Namaz Vakitleri Uygulaması"
+publish_to: 'none'
+
+version: 1.0.3+3
+
+environment:
+  sdk: ^3.2.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.1
+  dio: ^5.4.0
+  geolocator: ^14.0.0
+  geocoding: ^4.0.0
+  flutter_compass: ^0.8.0
+  flutter_local_notifications: ^18.0.0
+  firebase_core: ^4.7.0
+  firebase_analytics: ^12.3.0
+  google_mobile_ads: ^5.1.0
+  shared_preferences: ^2.2.2
+  intl: ^0.19.0
+  permission_handler: ^12.0.0
+  timezone: ^0.9.4
+  audioplayers: ^6.0.0
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  url_launcher: ^6.3.1
+  app_tracking_transparency: ^2.0.4
+  fl_chart: ^0.68.0
+  app_badge_plus: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  ios_content_mode: scaleAspectFill
+  adaptive_icon_background: "#0A1628"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
