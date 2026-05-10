@@ -21,32 +21,19 @@ class QiblaCompassScreen extends StatefulWidget {
 }
 
 class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
-  /// Cumulative heading so AnimatedRotation never wraps the long way around.
   double _headingCumulative = 0;
   double _headingRaw = 0;
   double _qiblaDirection = 0;
   bool _isAuthorized = false;
   bool _hasLocation = false;
-  bool _noSensor = false;       // device has no compass hardware
-  bool _needsCalibration = false; // Android: low magnetometer accuracy
+  bool _noSensor = false;
+  // accuracy: HIGH=15, MEDIUM=30, LOW=45, UNRELIABLE=-1
+  double _accuracy = -1;
   StreamSubscription<CompassEvent>? _compassSubscription;
 
   static const double _headingThreshold = 0.5;
 
-  void _updateHeading(double newRaw, double? accuracy) {
-    final currentAngle = _headingCumulative % 360;
-    double diff = newRaw - (currentAngle < 0 ? currentAngle + 360 : currentAngle);
-    if (diff > 180) diff -= 360;
-    if (diff < -180) diff += 360;
-    _headingCumulative += diff;
-    _headingRaw = newRaw;
-
-    // accuracy is in degrees on Android (lower = better).
-    // Values > 45° or == -1 signal unreliable magnetometer.
-    if (accuracy != null && accuracy != 0) {
-      _needsCalibration = accuracy > 45 || accuracy < 0;
-    }
-  }
+  bool get _needsCalibration => _accuracy < 0 || _accuracy >= 45;
 
   @override
   void initState() {
@@ -61,11 +48,14 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
   }
 
   Future<void> _startCompass() async {
-    final permission = await LocationService.shared.checkPermission();
+    var permission = await LocationService.shared.checkPermission();
+    if (!LocationService.shared.isAuthorized(permission)) {
+      permission = await LocationService.shared.requestPermission();
+    }
     _isAuthorized = LocationService.shared.isAuthorized(permission);
 
     if (!_isAuthorized) {
-      setState(() {});
+      if (mounted) setState(() {});
       return;
     }
 
@@ -75,9 +65,8 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
       _hasLocation = true;
     } catch (_) {}
 
-    // Null stream means the device has no compass sensor (common on emulators).
     if (FlutterCompass.events == null) {
-      setState(() => _noSensor = true);
+      if (mounted) setState(() => _noSensor = true);
       return;
     }
 
@@ -87,15 +76,31 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
       if (newRaw == null) return;
 
       final currentAngle = _headingCumulative % 360;
-      double diff = (newRaw - (currentAngle < 0 ? currentAngle + 360 : currentAngle)).abs();
+      final normalised = currentAngle < 0 ? currentAngle + 360 : currentAngle;
+      double diff = (newRaw - normalised).abs();
       if (diff > 180) diff = 360 - diff;
 
-      if (diff >= _headingThreshold) {
-        setState(() => _updateHeading(newRaw, event.accuracy));
-      }
+      setState(() {
+        if (diff >= _headingThreshold) {
+          double delta = newRaw - normalised;
+          if (delta > 180) delta -= 360;
+          if (delta < -180) delta += 360;
+          _headingCumulative += delta;
+          _headingRaw = newRaw;
+        }
+        if (event.accuracy != null) _accuracy = event.accuracy!;
+      });
     });
 
     if (mounted) setState(() {});
+
+    // Auto-show calibration overlay if accuracy is bad when the stream starts.
+    // Wait one tick so the build completes first.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _needsCalibration && !_noSensor && _isAuthorized) {
+        _showCalibrationDialog();
+      }
+    });
   }
 
   void _calculateQiblaDirection(double lat, double lon) {
@@ -108,13 +113,24 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
     final dLon = lon2 - lon1;
     final y = sin(dLon) * cos(lat2);
     final x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
-    var bearing = atan2(y, x) * 180 / pi;
-    _qiblaDirection = (bearing + 360) % 360;
+    _qiblaDirection = (atan2(y, x) * 180 / pi + 360) % 360;
   }
 
   String get _cardinalDirection {
     const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
     return directions[((_headingRaw + 22.5) / 45).floor() % 8];
+  }
+
+  void _showCalibrationDialog() {
+    final lang = context.read<PrayerTimeViewModel>().language;
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) => _CalibrationDialog(
+        language: lang,
+        compassStream: FlutterCompass.events,
+      ),
+    );
   }
 
   @override
@@ -147,22 +163,16 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                       Icon(AppIcons.compass, size: 50,
                           color: AppTheme.accentColor(context)),
                       const SizedBox(height: 8),
-                      Text(
-                        AppStrings.qiblaCompass(vm.language),
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.textPrimary(context),
-                        ),
-                      ),
+                      Text(AppStrings.qiblaCompass(vm.language),
+                          style: TextStyle(fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.textPrimary(context))),
                       if (vm.selectedCity != null && vm.selectedDistrict != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 4),
-                          child: Text(
-                            vm.locationLabel,
-                            style: TextStyle(fontSize: 14,
-                                color: AppTheme.textSecondary(context)),
-                          ),
+                          child: Text(vm.locationLabel,
+                              style: TextStyle(fontSize: 14,
+                                  color: AppTheme.textSecondary(context))),
                         ),
                     ],
                   ),
@@ -171,18 +181,16 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                   SizedBox(
                     width: 300,
                     height: 300,
-                    child: Stack(
-                      children: [
-                        CompassRose(heading: _headingCumulative),
-                        QiblaArrow(
-                          heading: _headingCumulative,
-                          qiblaDirection: _qiblaDirection,
-                          language: vm.language,
-                        ),
-                      ],
-                    ),
+                    child: Stack(children: [
+                      CompassRose(heading: _headingCumulative),
+                      QiblaArrow(
+                        heading: _headingCumulative,
+                        qiblaDirection: _qiblaDirection,
+                        language: vm.language,
+                      ),
+                    ]),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 24),
 
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -222,7 +230,7 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Warnings (stacked, only visible ones shown)
+                  // Warnings
                   if (_noSensor)
                     WarningCard(
                       icon: Icons.sensors_off_rounded,
@@ -231,15 +239,6 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                           : vm.language == 'ar'
                               ? 'لا يوجد مستشعر بوصلة في هذا الجهاز.'
                               : 'No compass sensor found on this device.',
-                    ),
-                  if (!_noSensor && _needsCalibration)
-                    WarningCard(
-                      icon: Icons.explore_off_rounded,
-                      message: vm.language == 'tr'
-                          ? 'Pusula kalibrasyonu gerekiyor. Telefonu 8 şeklinde hareket ettirin.'
-                          : vm.language == 'ar'
-                              ? 'البوصلة تحتاج إلى معايرة. حرّك الهاتف على شكل رقم 8.'
-                              : 'Compass needs calibration. Move your phone in a figure-8 pattern.',
                     ),
                   if (!_isAuthorized)
                     WarningCard(
@@ -254,6 +253,36 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                     ),
 
                   const Spacer(),
+
+                  // Permanent calibration button
+                  if (!_noSensor && _isAuthorized)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: TextButton.icon(
+                        onPressed: _showCalibrationDialog,
+                        icon: Icon(
+                          Icons.explore_rounded,
+                          size: 18,
+                          color: _needsCalibration
+                              ? Colors.orange
+                              : AppTheme.textSecondary(context),
+                        ),
+                        label: Text(
+                          vm.language == 'tr'
+                              ? 'Pusulayı Kalibre Et'
+                              : vm.language == 'ar'
+                                  ? 'معايرة البوصلة'
+                                  : 'Calibrate Compass',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: _needsCalibration
+                                ? Colors.orange
+                                : AppTheme.textSecondary(context),
+                          ),
+                        ),
+                      ),
+                    ),
+
                   const BannerAdContainer(),
                 ],
               ),
@@ -263,4 +292,163 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
       },
     );
   }
+}
+
+class _CalibrationDialog extends StatefulWidget {
+  final String language;
+  final Stream<CompassEvent>? compassStream;
+
+  const _CalibrationDialog({required this.language, required this.compassStream});
+
+  @override
+  State<_CalibrationDialog> createState() => _CalibrationDialogState();
+}
+
+class _CalibrationDialogState extends State<_CalibrationDialog>
+    with SingleTickerProviderStateMixin {
+  StreamSubscription<CompassEvent>? _sub;
+  double _accuracy = -1;
+  late AnimationController _figureEightCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _figureEightCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat();
+
+    _sub = widget.compassStream?.listen((event) {
+      if (!mounted) return;
+      if (event.accuracy != null) {
+        setState(() => _accuracy = event.accuracy!);
+        // Auto-close when high accuracy reached
+        if (_accuracy == 15) {
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (mounted) Navigator.of(context).pop();
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    _figureEightCtrl.dispose();
+    super.dispose();
+  }
+
+  String get _accuracyLabel {
+    if (_accuracy == 15) {
+      return widget.language == 'tr' ? 'Yüksek ✓' : widget.language == 'ar' ? 'عالية ✓' : 'High ✓';
+    } else if (_accuracy == 30) {
+      return widget.language == 'tr' ? 'Orta' : widget.language == 'ar' ? 'متوسطة' : 'Medium';
+    } else if (_accuracy == 45) {
+      return widget.language == 'tr' ? 'Düşük' : widget.language == 'ar' ? 'منخفضة' : 'Low';
+    }
+    return widget.language == 'tr' ? 'Belirsiz' : widget.language == 'ar' ? 'غير موثوق' : 'Unreliable';
+  }
+
+  Color get _accuracyColor {
+    if (_accuracy == 15) return Colors.green;
+    if (_accuracy == 30) return Colors.orange;
+    return Colors.red;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tr = widget.language == 'tr';
+    final ar = widget.language == 'ar';
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Row(
+        children: [
+          const Icon(Icons.explore_rounded, color: AppColors.gold),
+          const SizedBox(width: 8),
+          Text(tr ? 'Pusula Kalibrasyonu' : ar ? 'معايرة البوصلة' : 'Compass Calibration',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Figure-8 animation
+          SizedBox(
+            width: 120,
+            height: 80,
+            child: AnimatedBuilder(
+              animation: _figureEightCtrl,
+              builder: (_, __) {
+                final t = _figureEightCtrl.value * 2 * pi;
+                final x = 45 * sin(t);
+                final y = 25 * sin(2 * t);
+                return CustomPaint(
+                  painter: _Figure8Painter(
+                      dotX: x, dotY: y, color: AppColors.gold),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            tr
+                ? 'Telefonu aşağıdaki gibi 8 şeklinde birkaç kez hareket ettirin.'
+                : ar
+                    ? 'حرّك الهاتف على شكل رقم 8 عدة مرات.'
+                    : 'Move your phone in a figure-8 pattern several times.',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(tr ? 'Hassasiyet: ' : ar ? 'الدقة: ' : 'Accuracy: ',
+                  style: const TextStyle(fontSize: 13)),
+              Text(_accuracyLabel,
+                  style: TextStyle(fontSize: 13,
+                      fontWeight: FontWeight.bold, color: _accuracyColor)),
+            ],
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(tr ? 'Tamam' : ar ? 'موافق' : 'OK'),
+        ),
+      ],
+    );
+  }
+}
+
+class _Figure8Painter extends CustomPainter {
+  final double dotX, dotY;
+  final Color color;
+  const _Figure8Painter({required this.dotX, required this.dotY, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+    final tracePaint = Paint()
+      ..color = color.withOpacity(0.25)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    final path = Path();
+    for (int i = 0; i <= 100; i++) {
+      final t = i / 100 * 2 * pi;
+      final x = cx + 45 * sin(t);
+      final y = cy + 25 * sin(2 * t);
+      i == 0 ? path.moveTo(x, y) : path.lineTo(x, y);
+    }
+    canvas.drawPath(path, tracePaint);
+    canvas.drawCircle(Offset(cx + dotX, cy + dotY), 7,
+        Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(_Figure8Painter old) =>
+      old.dotX != dotX || old.dotY != dotY;
 }
