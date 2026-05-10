@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LocationService {
   static final LocationService shared = LocationService._();
@@ -21,14 +23,17 @@ class LocationService {
   }
 
   Future<LocationPermission> checkPermission() async {
-    // Native channel primary — geolocator_apple'ın deprecated class method bug'ını bypass et
+    if (Platform.isAndroid) {
+      final status = await Permission.locationWhenInUse.status;
+      return _fromPhStatus(status);
+    }
+    // iOS: use native channel (bypasses deprecated geolocator_apple class method)
     try {
       final status = await _channel.invokeMethod<String>('checkLocationPermission');
       if (status != null) return _fromNative(status);
     } catch (e) {
       debugPrint('native checkPermission error: $e');
     }
-    // Fallback
     try {
       return await Geolocator.checkPermission();
     } catch (e) {
@@ -38,20 +43,32 @@ class LocationService {
   }
 
   Future<LocationPermission> requestPermission() async {
-    // Native channel primary — iOS 26'da doğru instance-based API kullanır
+    if (Platform.isAndroid) {
+      // permission_handler directly calls ActivityCompat.requestPermissions —
+      // more reliable than geolocator's request which can silently fail if
+      // the Activity isn't fully attached when the call arrives.
+      final status = await Permission.locationWhenInUse.request();
+      return _fromPhStatus(status);
+    }
+    // iOS: use native channel
     try {
       final status = await _channel.invokeMethod<String>('requestLocationPermission');
       if (status != null) return _fromNative(status);
     } catch (e) {
       debugPrint('native requestPermission error: $e');
     }
-    // Fallback
     try {
       return await Geolocator.requestPermission();
     } catch (e) {
       debugPrint('requestPermission fallback error: $e');
       return LocationPermission.denied;
     }
+  }
+
+  LocationPermission _fromPhStatus(PermissionStatus status) {
+    if (status.isGranted || status.isLimited) return LocationPermission.whileInUse;
+    if (status.isPermanentlyDenied) return LocationPermission.deniedForever;
+    return LocationPermission.denied;
   }
 
   LocationPermission _fromNative(String status) {
@@ -92,13 +109,11 @@ class LocationService {
         DateTime.now().difference(_cacheTime!).inSeconds < 60) {
       return _cachedPosition!;
     }
-    // Try last known position first (instant on Android)
     try {
       final last = await Geolocator.getLastKnownPosition();
       if (last != null) {
         _cachedPosition = last;
         _cacheTime = DateTime.now();
-        // Also kick off a fresh fix in the background to update cache
         Geolocator.getCurrentPosition(
           locationSettings: const LocationSettings(
             accuracy: LocationAccuracy.low,
@@ -111,7 +126,6 @@ class LocationService {
         return last;
       }
     } catch (_) {}
-    // No last known — wait for fresh fix
     final position = await Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.low,

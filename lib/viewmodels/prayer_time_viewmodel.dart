@@ -117,7 +117,9 @@ class PrayerTimeViewModel extends ChangeNotifier with WidgetsBindingObserver {
     try {
       final permission = await locationService.checkPermission();
       if (!locationService.isAuthorized(permission)) {
-        await Future.delayed(const Duration(seconds: 1));
+        // Wait for the first frame to be fully rendered before requesting.
+        // On Android, the Activity must be attached and visible first.
+        await Future.delayed(const Duration(seconds: 2));
         final requested = await locationService.requestPermission();
         locationAuthStatus = locationService.authStatusString(requested);
         notifyListeners();
