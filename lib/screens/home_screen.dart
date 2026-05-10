@@ -48,6 +48,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _initialize() async {
     await NotificationService.shared.requestPermission();
     await _initAdMobWithATT();
+    // Request location AFTER notification dialog is dismissed so Android
+    // doesn't silently drop the second simultaneous permission dialog.
+    await _requestLocationIfNeeded();
+  }
+
+  Future<void> _requestLocationIfNeeded() async {
+    final perm = await LocationService.shared.checkPermission();
+    if (!LocationService.shared.isAuthorized(perm)) {
+      await Future.delayed(const Duration(milliseconds: 600));
+      final granted = await LocationService.shared.requestPermission();
+      if (mounted) {
+        context.read<PrayerTimeViewModel>().onLocationPermissionResult(
+            LocationService.shared.authStatusString(granted));
+      }
+    }
   }
 
   Future<void> _initAdMobWithATT() async {

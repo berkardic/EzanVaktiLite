@@ -96,8 +96,6 @@ class PrayerTimeViewModel extends ChangeNotifier with WidgetsBindingObserver {
       debugPrint('[VM] _updateAuthStatus() HATA: $e');
     }
 
-    _autoRequestLocationPermission();
-
     try {
       await loadCountries();
     } catch (e) {
@@ -113,20 +111,11 @@ class PrayerTimeViewModel extends ChangeNotifier with WidgetsBindingObserver {
     debugPrint('[VM] _init() tamamlandı');
   }
 
-  Future<void> _autoRequestLocationPermission() async {
-    try {
-      final permission = await locationService.checkPermission();
-      if (!locationService.isAuthorized(permission)) {
-        // Wait for the first frame to be fully rendered before requesting.
-        // On Android, the Activity must be attached and visible first.
-        await Future.delayed(const Duration(seconds: 2));
-        final requested = await locationService.requestPermission();
-        locationAuthStatus = locationService.authStatusString(requested);
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint('[VM] _autoRequestLocationPermission() HATA: $e');
-    }
+  // Called by HomeScreen after the notification permission dialog is dismissed,
+  // so location permission is requested sequentially (not simultaneously).
+  void onLocationPermissionResult(String status) {
+    locationAuthStatus = status;
+    notifyListeners();
   }
 
   @override
