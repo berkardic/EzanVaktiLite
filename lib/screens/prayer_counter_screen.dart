@@ -747,9 +747,9 @@ class _PrayerStatsScreenState extends State<_PrayerStatsScreen> {
     final yearPct = (_yearRate * 100).round();
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const Spacer(),
         // Legend
         Row(children: [
           Container(width: 12, height: 3, color: gold),
@@ -764,7 +764,7 @@ class _PrayerStatsScreenState extends State<_PrayerStatsScreen> {
             ),
           ),
         ]),
-        const SizedBox(height: 16),
+        const Spacer(),
         _StatCard(
           label: _l('Bu Ay', 'This Month', 'هذا الشهر'),
           value: '${(_monthRate * 100).toStringAsFixed(1)}%',
@@ -772,7 +772,7 @@ class _PrayerStatsScreenState extends State<_PrayerStatsScreen> {
           bg: bg,
           divColor: divColor,
         ),
-        const SizedBox(height: 8),
+        const Spacer(flex: 1),
         _StatCard(
           label: _l('Bu Yıl', 'This Year', 'هذا العام'),
           value: '${(_yearRate * 100).toStringAsFixed(1)}%',
@@ -780,14 +780,14 @@ class _PrayerStatsScreenState extends State<_PrayerStatsScreen> {
           bg: bg,
           divColor: divColor,
         ),
-        const SizedBox(height: 8),
-        // Missed prayer count card with info icon
+        const Spacer(flex: 1),
         _MissedCard(
           missed: _missedCount,
           language: widget.language,
           bg: bg,
           divColor: divColor,
         ),
+        const Spacer(),
       ],
     );
   }
