@@ -51,4 +51,4 @@ flutter_launcher_icons:
   image_path: "assets/icons/app_icon.png"
   ios_content_mode: scaleAspectFill
   adaptive_icon_background: "#0A1628"
-  adaptive_icon_foreground: "assets/icons/app_icon.png"
+  adaptive_icon_foreground: "assets/icons/app_icon_foreground.png"
