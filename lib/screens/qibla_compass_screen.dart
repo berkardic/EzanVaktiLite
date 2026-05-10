@@ -27,13 +27,20 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
   bool _isAuthorized = false;
   bool _hasLocation = false;
   bool _noSensor = false;
+
   // accuracy: HIGH=15, MEDIUM=30, LOW=45, UNRELIABLE=-1
-  double _accuracy = -1;
+  // ValueNotifier lets the calibration dialog react without subscribing
+  // to FlutterCompass.events a second time (EventChannel = single-listener).
+  final ValueNotifier<double> _accuracyNotifier = ValueNotifier(-1);
+
   StreamSubscription<CompassEvent>? _compassSubscription;
 
   static const double _headingThreshold = 0.5;
 
-  bool get _needsCalibration => _accuracy < 0 || _accuracy >= 45;
+  bool get _needsCalibration {
+    final a = _accuracyNotifier.value;
+    return a < 0 || a >= 45;
+  }
 
   @override
   void initState() {
@@ -44,6 +51,7 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
   @override
   void dispose() {
     _compassSubscription?.cancel();
+    _accuracyNotifier.dispose();
     super.dispose();
   }
 
@@ -88,19 +96,20 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
           _headingCumulative += delta;
           _headingRaw = newRaw;
         }
-        if (event.accuracy != null) _accuracy = event.accuracy!;
       });
+
+      if (event.accuracy != null) {
+        _accuracyNotifier.value = event.accuracy!;
+      }
     });
 
     if (mounted) setState(() {});
 
-    // Auto-show calibration overlay if accuracy is bad when the stream starts.
-    // Wait one tick so the build completes first.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _needsCalibration && !_noSensor && _isAuthorized) {
-        _showCalibrationDialog();
-      }
-    });
+    // Wait for first sensor reading before deciding to show calibration.
+    await Future.delayed(const Duration(seconds: 2));
+    if (mounted && _needsCalibration && !_noSensor && _isAuthorized) {
+      _showCalibrationDialog();
+    }
   }
 
   void _calculateQiblaDirection(double lat, double lon) {
@@ -128,7 +137,7 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
       barrierDismissible: true,
       builder: (_) => _CalibrationDialog(
         language: lang,
-        compassStream: FlutterCompass.events,
+        accuracyNotifier: _accuracyNotifier,
       ),
     );
   }
@@ -148,34 +157,30 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 4, top: 4),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          icon: Icon(Icons.arrow_back_ios_new_rounded,
-                              color: AppTheme.textPrimary(context), size: 22),
-                        ),
-                      ],
-                    ),
+                    child: Row(children: [
+                      IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: Icon(Icons.arrow_back_ios_new_rounded,
+                            color: AppTheme.textPrimary(context), size: 22),
+                      ),
+                    ]),
                   ),
-                  Column(
-                    children: [
-                      Icon(AppIcons.compass, size: 50,
-                          color: AppTheme.accentColor(context)),
-                      const SizedBox(height: 8),
-                      Text(AppStrings.qiblaCompass(vm.language),
-                          style: TextStyle(fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.textPrimary(context))),
-                      if (vm.selectedCity != null && vm.selectedDistrict != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Text(vm.locationLabel,
-                              style: TextStyle(fontSize: 14,
-                                  color: AppTheme.textSecondary(context))),
-                        ),
-                    ],
-                  ),
+                  Column(children: [
+                    Icon(AppIcons.compass, size: 50,
+                        color: AppTheme.accentColor(context)),
+                    const SizedBox(height: 8),
+                    Text(AppStrings.qiblaCompass(vm.language),
+                        style: TextStyle(fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.textPrimary(context))),
+                    if (vm.selectedCity != null && vm.selectedDistrict != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(vm.locationLabel,
+                            style: TextStyle(fontSize: 14,
+                                color: AppTheme.textSecondary(context))),
+                      ),
+                  ]),
                   const Spacer(),
 
                   SizedBox(
@@ -230,7 +235,6 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Warnings
                   if (_noSensor)
                     WarningCard(
                       icon: Icons.sensors_off_rounded,
@@ -254,33 +258,33 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
 
                   const Spacer(),
 
-                  // Permanent calibration button
                   if (!_noSensor && _isAuthorized)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: TextButton.icon(
-                        onPressed: _showCalibrationDialog,
-                        icon: Icon(
-                          Icons.explore_rounded,
-                          size: 18,
-                          color: _needsCalibration
-                              ? Colors.orange
-                              : AppTheme.textSecondary(context),
-                        ),
-                        label: Text(
-                          vm.language == 'tr'
-                              ? 'Pusulayı Kalibre Et'
-                              : vm.language == 'ar'
-                                  ? 'معايرة البوصلة'
-                                  : 'Calibrate Compass',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: _needsCalibration
-                                ? Colors.orange
-                                : AppTheme.textSecondary(context),
+                    ValueListenableBuilder<double>(
+                      valueListenable: _accuracyNotifier,
+                      builder: (_, accuracy, __) {
+                        final needsCal = accuracy < 0 || accuracy >= 45;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: TextButton.icon(
+                            onPressed: _showCalibrationDialog,
+                            icon: Icon(Icons.explore_rounded, size: 18,
+                                color: needsCal
+                                    ? Colors.orange
+                                    : AppTheme.textSecondary(context)),
+                            label: Text(
+                              vm.language == 'tr'
+                                  ? 'Pusulayı Kalibre Et'
+                                  : vm.language == 'ar'
+                                      ? 'معايرة البوصلة'
+                                      : 'Calibrate Compass',
+                              style: TextStyle(fontSize: 13,
+                                  color: needsCal
+                                      ? Colors.orange
+                                      : AppTheme.textSecondary(context)),
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
 
                   const BannerAdContainer(),
@@ -294,11 +298,16 @@ class _QiblaCompassScreenState extends State<QiblaCompassScreen> {
   }
 }
 
+// ---------------------------------------------------------------------------
+
 class _CalibrationDialog extends StatefulWidget {
   final String language;
-  final Stream<CompassEvent>? compassStream;
+  final ValueNotifier<double> accuracyNotifier;
 
-  const _CalibrationDialog({required this.language, required this.compassStream});
+  const _CalibrationDialog({
+    required this.language,
+    required this.accuracyNotifier,
+  });
 
   @override
   State<_CalibrationDialog> createState() => _CalibrationDialogState();
@@ -306,8 +315,6 @@ class _CalibrationDialog extends StatefulWidget {
 
 class _CalibrationDialogState extends State<_CalibrationDialog>
     with SingleTickerProviderStateMixin {
-  StreamSubscription<CompassEvent>? _sub;
-  double _accuracy = -1;
   late AnimationController _figureEightCtrl;
 
   @override
@@ -318,41 +325,40 @@ class _CalibrationDialogState extends State<_CalibrationDialog>
       duration: const Duration(seconds: 3),
     )..repeat();
 
-    _sub = widget.compassStream?.listen((event) {
-      if (!mounted) return;
-      if (event.accuracy != null) {
-        setState(() => _accuracy = event.accuracy!);
-        // Auto-close when high accuracy reached
-        if (_accuracy == 15) {
-          Future.delayed(const Duration(milliseconds: 500), () {
-            if (mounted) Navigator.of(context).pop();
-          });
-        }
-      }
-    });
+    widget.accuracyNotifier.addListener(_onAccuracyChanged);
+  }
+
+  void _onAccuracyChanged() {
+    if (!mounted) return;
+    setState(() {});
+    if (widget.accuracyNotifier.value == 15) {
+      Future.delayed(const Duration(milliseconds: 600), () {
+        if (mounted) Navigator.of(context).pop();
+      });
+    }
   }
 
   @override
   void dispose() {
-    _sub?.cancel();
+    widget.accuracyNotifier.removeListener(_onAccuracyChanged);
     _figureEightCtrl.dispose();
     super.dispose();
   }
 
   String get _accuracyLabel {
-    if (_accuracy == 15) {
-      return widget.language == 'tr' ? 'Yüksek ✓' : widget.language == 'ar' ? 'عالية ✓' : 'High ✓';
-    } else if (_accuracy == 30) {
-      return widget.language == 'tr' ? 'Orta' : widget.language == 'ar' ? 'متوسطة' : 'Medium';
-    } else if (_accuracy == 45) {
-      return widget.language == 'tr' ? 'Düşük' : widget.language == 'ar' ? 'منخفضة' : 'Low';
-    }
-    return widget.language == 'tr' ? 'Belirsiz' : widget.language == 'ar' ? 'غير موثوق' : 'Unreliable';
+    final a = widget.accuracyNotifier.value;
+    final tr = widget.language == 'tr';
+    final ar = widget.language == 'ar';
+    if (a == 15) return tr ? 'Yüksek ✓' : ar ? 'عالية ✓' : 'High ✓';
+    if (a == 30) return tr ? 'Orta' : ar ? 'متوسطة' : 'Medium';
+    if (a == 45) return tr ? 'Düşük' : ar ? 'منخفضة' : 'Low';
+    return tr ? 'Belirsiz' : ar ? 'غير موثوق' : 'Unreliable';
   }
 
   Color get _accuracyColor {
-    if (_accuracy == 15) return Colors.green;
-    if (_accuracy == 30) return Colors.orange;
+    final a = widget.accuracyNotifier.value;
+    if (a == 15) return Colors.green;
+    if (a == 30) return Colors.orange;
     return Colors.red;
   }
 
@@ -362,18 +368,15 @@ class _CalibrationDialogState extends State<_CalibrationDialog>
     final ar = widget.language == 'ar';
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Row(
-        children: [
-          const Icon(Icons.explore_rounded, color: AppColors.gold),
-          const SizedBox(width: 8),
-          Text(tr ? 'Pusula Kalibrasyonu' : ar ? 'معايرة البوصلة' : 'Compass Calibration',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        ],
-      ),
+      title: Row(children: [
+        const Icon(Icons.explore_rounded, color: AppColors.gold),
+        const SizedBox(width: 8),
+        Text(tr ? 'Pusula Kalibrasyonu' : ar ? 'معايرة البوصلة' : 'Compass Calibration',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      ]),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Figure-8 animation
           SizedBox(
             width: 120,
             height: 80,
@@ -381,11 +384,12 @@ class _CalibrationDialogState extends State<_CalibrationDialog>
               animation: _figureEightCtrl,
               builder: (_, __) {
                 final t = _figureEightCtrl.value * 2 * pi;
-                final x = 45 * sin(t);
-                final y = 25 * sin(2 * t);
                 return CustomPaint(
                   painter: _Figure8Painter(
-                      dotX: x, dotY: y, color: AppColors.gold),
+                    dotX: 45 * sin(t),
+                    dotY: 25 * sin(2 * t),
+                    color: AppColors.gold,
+                  ),
                 );
               },
             ),
@@ -393,24 +397,21 @@ class _CalibrationDialogState extends State<_CalibrationDialog>
           const SizedBox(height: 16),
           Text(
             tr
-                ? 'Telefonu aşağıdaki gibi 8 şeklinde birkaç kez hareket ettirin.'
+                ? 'Telefonu aşağıdaki gibi 8 şeklinde\nbir kaç kez hareket ettirin.'
                 : ar
                     ? 'حرّك الهاتف على شكل رقم 8 عدة مرات.'
-                    : 'Move your phone in a figure-8 pattern several times.',
+                    : 'Move your phone in a figure-8 pattern\nseveral times.',
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(tr ? 'Hassasiyet: ' : ar ? 'الدقة: ' : 'Accuracy: ',
-                  style: const TextStyle(fontSize: 13)),
-              Text(_accuracyLabel,
-                  style: TextStyle(fontSize: 13,
-                      fontWeight: FontWeight.bold, color: _accuracyColor)),
-            ],
-          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(tr ? 'Hassasiyet: ' : ar ? 'الدقة: ' : 'Accuracy: ',
+                style: const TextStyle(fontSize: 13)),
+            Text(_accuracyLabel,
+                style: TextStyle(fontSize: 13,
+                    fontWeight: FontWeight.bold, color: _accuracyColor)),
+          ]),
         ],
       ),
       actions: [
@@ -422,6 +423,8 @@ class _CalibrationDialogState extends State<_CalibrationDialog>
     );
   }
 }
+
+// ---------------------------------------------------------------------------
 
 class _Figure8Painter extends CustomPainter {
   final double dotX, dotY;
@@ -444,8 +447,11 @@ class _Figure8Painter extends CustomPainter {
       i == 0 ? path.moveTo(x, y) : path.lineTo(x, y);
     }
     canvas.drawPath(path, tracePaint);
-    canvas.drawCircle(Offset(cx + dotX, cy + dotY), 7,
-        Paint()..color = color);
+    canvas.drawCircle(
+      Offset(cx + dotX, cy + dotY),
+      7,
+      Paint()..color = color,
+    );
   }
 
   @override
