@@ -20,8 +20,8 @@ subprojects {
 }
 
 // Suppress obsolete Java 8 source/target warnings from plugin dependencies
-subprojects {
-    afterEvaluate {
+gradle.projectsEvaluated {
+    subprojects {
         tasks.withType<JavaCompile>().configureEach {
             options.compilerArgs.addAll(listOf("-Xlint:-options"))
         }
